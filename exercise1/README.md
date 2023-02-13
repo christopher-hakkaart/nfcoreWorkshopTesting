@@ -1,0 +1,193 @@
+# Exercise 1: Command line run
+
+### Objectives 
+* View available parameters
+* Add key inputs on the command line
+* Explore workflow setup
+
+## Testing reflection
+* FYI cvmfs was not auto-cached, will need to prepare VMs so users can access without needing to edit pub keys 
+* FYI using the latest stable release and documentation (docs for earlier versions not available)
+* TODO provide context to rnaseq workflow 
+* TODO ask Audrey to update version of nextflow on bio image (for running 3.10.1, need nextflow 22.10.1). See issue below.
+* TODO ask Audrey to install http://www.graphviz.org
+* TODO change the names/paths to files (on cvmfs) for sake of tidiness 
+* TODO confirm container path changes with Alex 
+* TODO port all materials to cvmfs (cloudstor link as backup) 
+* Q should max mem, max cpu flag parameters be an exercise with cpu and memory limits provided? 
+* Q how to explain container tools available. Include: Singularity, Docker, Charliecloud, Podman, Shifter, gitpod?
+* Q should we run -stub instead of whole command?
+
+## Content draft 
+
+You can find the parameters for each nf-core workflow on their respective documentation sites. The nf-core/rnaseq workflow parameters can be found [here](https://nf-co.re/rnaseq/3.10.1/parameters). In the case of the nf-core/rnaseq workflow, parameters are grouped based on various stages of the workflow: 
+
+1. Input/output options for specifying which files to process and where to save results
+2. UMI options for processing reads with unique molecular identifiers (UMI)
+3. Read filtering options to be run prior to alignment 
+4. Reference genome options related to pre-processing of the reference FASTA 
+5. Read trimming options prior to alignment 
+6. Alignment options for read mapping and filtering criteria 
+7. Process skipping options for adjusting the processes to run with the workflow 
+
+On the command line you can view these options by running: 
+```
+nextflow run ../rnaseq/main.nf --help 
+```
+
+Notice at the bottom of the print out, there is 
+```
+!! Hiding 24 params, use --show_hidden_params to show them !!
+```
+
+Three additional parameter sections are hidden from view. This is because they are less commonly used. They include: 
+
+8. Institutional config options for various compute environments 
+9. Max job request options for limiting memory and cpu usage based on what is available to you
+10. Generic options focused on how the pipeline is run
+
+To view all the workflow run options on the command line, run: 
+```
+nextflow run ../rnaseq/main.nf --help --show_hidden_params
+```
+
+We will be using a number of flags from each section today. In addition to the required parameters, we have chosen to use some additional flags that limit the compute resource usage of the pipeline, specify prepared fasta, gtf, and star index files, and run the workflow using Singularity. 
+
+> **:fire: HOT TIP :fire:** 
+Hyphens matter when it comes to parameter flags! Nextflow command-line parameters use one (-), whereas pipeline-specific parameters use two (--). For example: `-profile` is a Nextflow parameter, while `--input` is an nf-core parameter. 
+
+**[INSERT A DIAGRAM OF THE COMMAND WHICH CATEGORISES/EXPLAINS EACH FLAG USED?]**
+
+The instance we are working on today has fewer CPUs and memory available than the default run (16 CPUs, 128GB) settings. As such, we will be using the following flags:  
+```
+--max_memory '6.GB'
+--max_cpus 2
+```
+
+From previous experience running STAR, we know it requires XX GB to generate the index files. For the sake of this workshop, we are working with subset files and have provided these along with previously generated STAR index files. These are stored on CVMFS at: 
+```
+cvmfs_path=/cvmfs/data.biocommons.aarnet.edu.au/Final_resources_250722/Mouse_chr18_reference
+```
+
+**[ACTIVITY TO CACHE CVMFS?]**
+
+We will specify the use of this STAR index and other prepared reference files with the following flags:
+```
+--gtf $cvmfs_path/Mouse_chr18_reference/chr_18_startOfLine.gtf 
+--fasta $cvmfs_path/Mouse_chr18_reference/chr18.fa
+--star_index $cvmfs_path/Mouse_chr18_reference/chr18_STAR_singularity_index
+```
+
+
+A nice feature of nf-core workflows is integrated software dependency management via container management software and/or conda environments. This saves us a lot of blood, sweat, and tears in installing all the tools run by this workflow and their dependencies. To run containers, nf-core requires we have either Docker or Singularity installed. These are container management tools and both are available on our Nimbus instances. By running the following command, we have instructed Nextflow to execute jobs on Nimbus using Singularity to fulfill software dependencies:
+```
+-profile singularity
+```
+
+Another nice feature of Nextflow is the ability to generate resource and runtime reports. These are produced by default (see `nextflow.config`), and are output to the defined tracedir with the file name and a timestamp: 
+
+```
+def trace_timestamp = new java.util.Date().format( 'yyyy-MM-dd_HH-mm-ss')
+timeline {
+    enabled = true
+    file    = "${params.tracedir}/execution_timeline_${trace_timestamp}.html"
+}
+report {
+    enabled = true
+    file    = "${params.tracedir}/execution_report_${trace_timestamp}.html"
+}
+trace {
+    enabled = true
+    file    = "${params.tracedir}/execution_trace_${trace_timestamp}.txt"
+}
+dag {
+    enabled = true
+    file    = "${params.tracedir}/pipeline_dag_${trace_timestamp}.html"
+}
+```
+
+So we can keep track of all the different exercises in today's workshop, we're going to opt to rename these reports at runtime, with the following flags:
+```
+-with-report report/execution_report_exercise1.html
+-with-trace report/execution_trace_exercise1.txt
+-with-timeline report/timeline_exercise1.html
+-with-dag report/dag_exercise1.png
+``` 
+
+We've used a standard experimental design and do not need to adjust any additional parameters at this stage. Now that we have decided on the additional flags to use, run the workflow with the following:
+```
+nextflow run ../rnaseq/main.nf \
+    --input samplesheet.csv \
+    --outdir /home/ubuntu/nfcoreWorkshopTesting/exercise1/results \
+    --max_memory '6.GB' --max_cpus 2 \
+    --gtf $cvmfs_path/chr_18_startOfLine.gtf \
+    --fasta $cvmfs_path/chr18.fa \
+    --star_index $cvmfs_path/chr18_STAR_singularity_index \
+    -profile singularity \
+    -with-report execution_report_exercise1.html \
+    -with-trace execution_trace_exercise1.txt \
+    -with-timeline timeline_exercise1.html \
+    -with-dag dag_exercise1.png 
+```
+
+## Troubleshooting
+
+### **Nextflow version incompatible with nf-core/rnaseq**
+
+The version of Nextflow currently installed on Nimbus BioImage is incompatible with the most recent stable release of the nf-core/rnaseq workflow. When running: 
+```
+nextflow run ../rnaseq/main.nf \
+    --input samplesheet.csv \
+    --outdir /home/ubuntu/nfcoreWorkshopTesting/exercise1/results \
+    --max_memory '6.GB' --max_cpus 2 \
+    --gtf $cvmfs_path/chr_18_startOfLine.gtf \
+    --fasta $cvmfs_path/chr18.fa \
+    --star_index $cvmfs_path/chr18_STAR_singularity_index \
+    -profile singularity \
+    -with-report execution_report_exercise1.html \
+    -with-trace execution_trace_exercise1.txt \
+    -with-timeline timeline_exercise1.html \
+    -with-dag dag_exercise1.png 
+```
+
+Got the following error: 
+```
+Nextflow version 22.04.3 does not match workflow required version: >=22.10.1
+```
+
+Workaround was to update Nextflow with:
+```
+sudo nextflow self-update
+```
+
+Then rerun workflow script `exercise1_run.sh`, but got: 
+```
+exercise1_run.sh: line 3: /usr/local/bin/nextflow: Permission denied
+```
+
+Running the following worked:
+```
+sudo bash exercise1_run.sh
+```
+
+### **Graphviz installation**
+
+Had to install graphviz for DAG:
+```
+sudo apt install graphviz
+```
+
+### **Generating STAR index**
+
+STAR index for chr18 was created with outdated version of STAR. In this workshop we will be running the latest stable release of nf-core/rnaseq and will need to update the index. When running the pipeline with Nandan's materials, got the following:
+```
+EXITING because of FATAL ERROR: Genome version: 20201 is INCOMPATIBLE with running STAR version: 2.7.9a
+SOLUTION: please re-generate genome from scratch with running version of STAR, or with version: 2.7.4a
+```
+
+
+
+## Links/resources 
+
+* [CVMFS testing repository](https://github.com/Sydney-Informatics-Hub/cvmfsTesting)
+* [STAR user guide](https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf)

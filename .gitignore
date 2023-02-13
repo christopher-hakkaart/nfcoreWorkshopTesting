@@ -1,0 +1,8 @@
+rnaseq/
+working_directory/
+exercise*/work/
+exercise*/results/
+exercise*/*.html 
+exercise*/*.txt
+exercise*/dag*.png
+exercise*/.nextflow*
