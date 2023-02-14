@@ -6,3 +6,5 @@ exercise*/*.html
 exercise*/*.txt
 exercise*/dag*.png
 exercise*/.nextflow*
+working_directory/
+materials/

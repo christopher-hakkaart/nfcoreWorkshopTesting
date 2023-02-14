@@ -34,13 +34,14 @@ git clone https://github.com/nf-core/rnaseq.git
 ### Download materials 
 
 Download subset/test data from Cloudstor
-```
-wget -O RNAseq_materials.tar.gz https://cloudstor.aarnet.edu.au/plus/s/xveu7WCIdj7bk6c/download
+```bash
+wget -O nfcore_materials.tar.gz https://cloudstor.aarnet.edu.au/plus/s/OKmdKDGyqXM6DO4/download
 ```
 Unpack the files: 
 ```bash
-tar -zxvf RNAseq_materials.tar.gz
+tar -zxvf nfcore_materials.tar.gz
 ```
+
 ### CVMFS caching 
 
 Need to cache CVMFS before we can access containers or Nandan's training materials. This should not be required for workshop. Would like CVMFS repositories pre-mounted, as they would be going forward. Before running anything, had to re-install CVMFS:
@@ -121,7 +122,6 @@ Notes for each exercise draft have been included in the following directories. E
 * Content draft 
 * Troubleshooting
 * Links/resources
-
 * [Exercise 1](nfcoreWorkshopTesting/exercise1/README.md)
 * [Exercise 2](nfcoreWorkshopTesting/exercise2/README.md)
 * [Exercise 3](nfcoreWorkshopTesting/exercise3/README.md)

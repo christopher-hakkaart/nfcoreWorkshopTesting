@@ -1,10 +1,11 @@
 # Exercise 1: Command line run
 
-### Objectives 
+## Objectives 
 * View available parameters
 * Add key inputs on the command line
 * Explore workflow setup
 
+---------------------
 ## Testing reflection
 * FYI cvmfs was not auto-cached, will need to prepare VMs so users can access without needing to edit pub keys 
 * FYI using the latest stable release and documentation (docs for earlier versions not available)
@@ -17,7 +18,10 @@
 * Q should max mem, max cpu flag parameters be an exercise with cpu and memory limits provided? 
 * Q how to explain container tools available. Include: Singularity, Docker, Charliecloud, Podman, Shifter, gitpod?
 * Q should we run -stub instead of whole command?
+* DONE tested with most recent version of nf-core/rnaseq. Not using Nandan's nextflow.config 
+* DONE re-created reference data and STAR indexes. New [Cloudstor link]().
 
+-----------------
 ## Content draft 
 
 You can find the parameters for each nf-core workflow on their respective documentation sites. The nf-core/rnaseq workflow parameters can be found [here](https://nf-co.re/rnaseq/3.10.1/parameters). In the case of the nf-core/rnaseq workflow, parameters are grouped based on various stages of the workflow: 
@@ -130,6 +134,11 @@ nextflow run ../rnaseq/main.nf \
     -with-dag dag_exercise1.png 
 ```
 
+While the workflow runs (~20 mins), let's look at how it has been configured for a default run by looking at the `rnaseq/nextflow.config` file. 
+
+**<INSERT SOME ACTIVITIES>**
+
+------------------
 ## Troubleshooting
 
 ### **Nextflow version incompatible with nf-core/rnaseq**
@@ -185,7 +194,62 @@ EXITING because of FATAL ERROR: Genome version: 20201 is INCOMPATIBLE with runni
 SOLUTION: please re-generate genome from scratch with running version of STAR, or with version: 2.7.4a
 ```
 
+Resolved. Prepared indexes on personal testing VM:
 
+1. Downloaded mm10 chr18 fasta and mm10 gtf
+```
+wget https://ftp.ensembl.org/pub/release-109/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.chromosome.18.fa.gz
+wget https://ftp.ensembl.org/pub/release-109/gtf/mus_musculus/Mus_musculus.GRCm39.109.gtf.gz 
+```
+
+2. Unzip 
+```
+gunzip Mus_musculus.GRCm39.dna.chromosome.18.fa.gz 
+gunzip Mus_musculus.GRCm39.109.gtf.gz 
+```
+
+3. Index with STAR 
+```
+singularity run -B /data docker://quay.io/biocontainers/star:2.7.9a--h9ee0642_0 \
+    STAR \
+    --runThreadN 10 \
+    --runMode genomeGenerate \
+    --genomeSAindexNbases 12 \
+    --genomeDir /data/NFCORE_MATERIALS/mm10_reference \
+    --genomeFastaFiles /data/NFCORE_MATERIALS/mm10_reference/mm10_chr18.fa \
+    --sjdbGTFfile /data/NFCORE_MATERIALS/mm10_reference/Mus_musculus.GRCm39.109.gtf
+```
+
+4. Extract chr18 and header lines only from gtf:
+```
+awk '/^18/ || /^#!/'  Mus_musculus.GRCm39.109.gtf > mm10_chr18.gtf
+```
+
+5. Reran pipeline
+```
+materials=/home/ubuntu/nfcoreWorkshopTesting/materials/mm10_reference
+
+nextflow run ../rnaseq/main.nf \
+    --input samplesheet.csv \
+    --outdir /home/ubuntu/nfcoreWorkshopTesting/exercise1/results \
+    --max_memory '6.GB' --max_cpus 2 \
+    --gtf $materials/mm10_chr18.gtf \
+    --fasta $materials/mm10_chr18.fa \
+    --star_index $materials \
+    -profile singularity \
+    -with-report execution_report_exercise1.html \
+    -with-trace execution_trace_exercise1.txt \
+    -with-timeline timeline_exercise1.html \
+    -with-dag dag_exercise1.png 
+```
+
+```
+[nf-core/rnaseq] Pipeline completed successfully-
+Completed at: 14-Feb-2023 01:46:38
+Duration    : 22m 23s
+CPU hours   : 0.5
+Succeeded   : 202
+```
 
 ## Links/resources 
 
