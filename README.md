@@ -45,7 +45,7 @@ Using the same dataset as rnaseq workshop, but needed to recreate STAR indexes f
 
 Download subset/test data from Cloudstor
 ```bash
-wget -O nfcore_materials.tar.gz https://cloudstor.aarnet.edu.au/plus/s/ilw4NOctO8SJyHX/download
+wget -O nfcore_materials.tar.gz https://cloudstor.aarnet.edu.au/plus/s/gIBdDhKEwfq2j58/download
 ```
 Unpack the files: 
 ```bash
