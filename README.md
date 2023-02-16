@@ -1,6 +1,12 @@
 # nfcoreWorkshopTesting
 
-Testing and materials development for AusBioCommons customising nf-core workshop 2023
+Testing and materials development for AusBioCommons customising nf-core workshop 2023. 
+
+* [Set up environment](#set-up-environment)
+    + [Download rnaseq pipeline](#download-rnaseq-pipeline)
+    + [Download materials](#download-materials)
+    + [CVMFS caching](#cvmfs-caching)
+* [Materials testing](#materials-testing)
 
 Materials developed by: 
 * Cali Willet
