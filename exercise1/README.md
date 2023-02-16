@@ -123,7 +123,7 @@ We've used a standard experimental design and do not need to adjust any addition
 materials=/home/ubuntu/nfcoreWorkshopTesting/materials/mm10_reference
 
 nextflow run ../rnaseq/main.nf \
-    --input samplesheet.csv \
+    --input ./materials/samplesheet.csv \
     --outdir /home/ubuntu/nfcoreWorkshopTesting/exercise1/results \
     --max_memory '6.GB' --max_cpus 2 \
     --gtf $materials/mm10_chr18.gtf \
