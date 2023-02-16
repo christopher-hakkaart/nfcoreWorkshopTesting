@@ -6,5 +6,7 @@ exercise*/*.html
 exercise*/*.txt
 exercise*/dag*.png
 exercise*/.nextflow*
+exercise*/samplesheet.csv
 working_directory/
 materials/
+nfcore_materials.tar.gz

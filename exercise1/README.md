@@ -77,9 +77,9 @@ cvmfs_path=/cvmfs/data.biocommons.aarnet.edu.au/Final_resources_250722/Mouse_chr
 
 We will specify the use of this STAR index and other prepared reference files with the following flags:
 ```
---gtf $cvmfs_path/Mouse_chr18_reference/chr_18_startOfLine.gtf 
---fasta $cvmfs_path/Mouse_chr18_reference/chr18.fa
---star_index $cvmfs_path/Mouse_chr18_reference/chr18_STAR_singularity_index
+--gtf $materials/mm10_chr18.gtf
+--fasta $materials/Mouse_chr18_reference/chr18.fa
+--star_index $materials/STAR
 ```
 
 
@@ -120,13 +120,15 @@ So we can keep track of all the different exercises in today's workshop, we're g
 
 We've used a standard experimental design and do not need to adjust any additional parameters at this stage. Now that we have decided on the additional flags to use, run the workflow with the following:
 ```
+materials=/home/ubuntu/nfcoreWorkshopTesting/materials/mm10_reference
+
 nextflow run ../rnaseq/main.nf \
     --input samplesheet.csv \
     --outdir /home/ubuntu/nfcoreWorkshopTesting/exercise1/results \
     --max_memory '6.GB' --max_cpus 2 \
-    --gtf $cvmfs_path/chr_18_startOfLine.gtf \
-    --fasta $cvmfs_path/chr18.fa \
-    --star_index $cvmfs_path/chr18_STAR_singularity_index \
+    --gtf $materials/mm10_chr18.gtf \
+    --fasta $materials/mm10_chr18.fa \
+    --star_index $materials/STAR \
     -profile singularity \
     -with-report execution_report_exercise1.html \
     -with-trace execution_trace_exercise1.txt \
@@ -143,7 +145,7 @@ While the workflow runs (~20 mins), let's look at how it has been configured for
 
 ### **Nextflow version incompatible with nf-core/rnaseq**
 
-The version of Nextflow currently installed on Nimbus BioImage is incompatible with the most recent stable release of the nf-core/rnaseq workflow. When running: 
+The version of Nextflow currently installed on Nimbus BioImage is incompatible with the most recent stable release of the nf-core/rnaseq workflow. When running Nandan's command with cvmfs materials: 
 ```
 nextflow run ../rnaseq/main.nf \
     --input samplesheet.csv \
@@ -235,7 +237,7 @@ nextflow run ../rnaseq/main.nf \
     --max_memory '6.GB' --max_cpus 2 \
     --gtf $materials/mm10_chr18.gtf \
     --fasta $materials/mm10_chr18.fa \
-    --star_index $materials \
+    --star_index $materials/STAR \
     -profile singularity \
     -with-report execution_report_exercise1.html \
     -with-trace execution_trace_exercise1.txt \
@@ -251,6 +253,7 @@ CPU hours   : 0.5
 Succeeded   : 202
 ```
 
+-------------------
 ## Links/resources 
 
 * [CVMFS testing repository](https://github.com/Sydney-Informatics-Hub/cvmfsTesting)

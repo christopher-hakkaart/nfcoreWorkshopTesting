@@ -7,7 +7,8 @@ Materials developed by:
 * Georgie Samaha 
 
 Test instances:
-* 146.118.64.217 
+* 146.118.64.217
+* 146.118.66.55
 
 ## Set up environment 
 
@@ -33,9 +34,18 @@ git clone https://github.com/nf-core/rnaseq.git
 
 ### Download materials 
 
+Using the same dataset as rnaseq workshop, but needed to recreate STAR indexes for most recent stable release of nf-core/rnaseq workflow and opting to rename files and directory for sake of clarity. Will send updated materials to Alex to be uploaded to cvmfs once finalised. For now materials are on Cloudstor (and subject to change) and contain:
+
+* `mm10_reference/mm10_chr18.fa` 
+* `mm10_reference/mm10_chr18.gtf`
+* `mm10_reference/STAR/` (star index files)
+* `samplesheet.csv` (assumes fq path `/home/ubuntu/nfcoreWorkshopTesting/materials/`)
+* `fastqs/`
+* `README.md`
+
 Download subset/test data from Cloudstor
 ```bash
-wget -O nfcore_materials.tar.gz https://cloudstor.aarnet.edu.au/plus/s/OKmdKDGyqXM6DO4/download
+wget -O nfcore_materials.tar.gz https://cloudstor.aarnet.edu.au/plus/s/ilw4NOctO8SJyHX/download
 ```
 Unpack the files: 
 ```bash
@@ -87,7 +97,9 @@ ls /cvmfs/unpacked.containers.biocommons.aarnet.edu.au
 
 **RNAseq training materials**
 
-Make key directory for the repository: 
+Do not need to worry about this for now, as materials are not yet available. See Cloudstor link for now. 
+
+To access cvmfs data repository, make key directory for the repository: 
 ```
 sudo mkdir /etc/cvmfs/keys/data.biocommons.aarnet.edu.au/
 ```
