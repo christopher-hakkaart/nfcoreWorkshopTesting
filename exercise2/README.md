@@ -13,6 +13,7 @@
 * FYI focus in this exercise is on customising processes, not their execution 
 * TODO request Seqera cover configuration heirarchy in session 1 to be reiterated here 
 * TODO add email for summary email at end of the run 
+  - This does not work, see email_on_complete_error which captures the errors from nextflow.log when attempting to use --email parameter. This was with the latest nextflow and nf-core rnaseq versions
 * TODO 
 * DONE 
 * Q 
