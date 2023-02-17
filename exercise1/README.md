@@ -136,7 +136,12 @@ nextflow run ../rnaseq/main.nf \
     -with-dag dag_exercise1.png 
 ```
 
-While the workflow runs (~20 mins), let's look at how it has been configured for a default run by looking at the `rnaseq/nextflow.config` file. 
+While the workflow runs (~20 mins), let's look at how it has been configured for a default run by looking at the `rnaseq/nextflow.config` file.
+
+Also look at local nextflow.config [ Georgie please add this to download materials]
+    - This config only has a set of parameters to overwrite some of the reporting files. This is useful if we re-run and want to overwrite the output files, eg if we have made an incorrect command. Without this, the nextflow command will fail (will fail only for dag and trace, but will warn for report and timeline) 
+    - Discuss how anything in our local nextflow config will overwrite what is present in the `rnaseq/nextflow.config` file
+    - Remind about order of priority for reading parameters 
 
 **<INSERT SOME ACTIVITIES>**
 
