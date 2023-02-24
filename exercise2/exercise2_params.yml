@@ -1,5 +1,5 @@
 input: "/home/ubuntu/nfcoreWorkshopTesting/materials/samplesheet.csv" 
-outdir: "/home/ubuntu/nfcoreWorkshopTesting/exercise2/results"
+outdir: "/home/ubuntu/nfcoreWorkshopTesting/exercise2"
 gtf: "/home/ubuntu/nfcoreWorkshopTesting/materials/mm10_reference/mm10_chr18.gtf"
 fasta: "/home/ubuntu/nfcoreWorkshopTesting/materials/mm10_reference/mm10_chr18.fa"
 star_index: "/home/ubuntu/nfcoreWorkshopTesting/materials/mm10_reference/STAR" 
