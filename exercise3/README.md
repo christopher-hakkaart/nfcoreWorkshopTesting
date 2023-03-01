@@ -50,7 +50,7 @@ Once you have saved your `nextflow.config` file, run the following:
 ```
 nextflow run ../rnaseq/main.nf \
 	-profile singularity \
-	-params-file exercise2_params.yaml
+	-params-file exercise2_params.yaml \
 	-resume
 ```
 
@@ -58,7 +58,16 @@ Quick quiz:
 - Where do you think your output will be?
   - It's not in Results!
   - The default `outdir` value specified in our custom config has been overridden by the value specified in our params.yaml. Remember the order of priority!
-- If we wanted to run this analysis with 1 CPU, how would we do that without changing the configuration file?
+- If we wanted to run this analysis writing outputs to a directory named `exercise3`, how would we do that without changing the configuration or paramaters file?
+	- Insert cool drop down 'Answer' box
+```
+nextflow run ../rnaseq/main.nf \
+	-profile singularity \
+	-params-file exercise2_params.yaml \
+	-resume \
+	--outdir exercise3
+```
+
 
 ### Defining parameters for specific processes
 
