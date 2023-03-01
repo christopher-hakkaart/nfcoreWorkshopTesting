@@ -1,4 +1,15 @@
-## Specifying additional optional arguments to a process
+# Exercise 5: Specifying external arguments to a process
+
+## Objectives 
+- Discuss the importance of reading the tool documentation for key tools in the workflow to decide on customised parameters
+- Identify which tool parameters are included by nf-core, either hard-coded or customisable as a workflow argument either by command line or parameters file
+- Learn how to specify additional external arguments to a process ie those that are available to the tool but not covered by nf-core arguments
+
+---------------------
+## Testing reflection
+
+---------------------
+## Content draft 
 
 nf-core provides a number of flexible parameters for each process in the workflow. These are specified with the double dash syntax on the command line, or saved in a parameters file as we have covered in the previous exercises.
 
@@ -60,8 +71,20 @@ process {
 }
 ``` 
 
+Re-run the previous command specifying `--outdir exercise5`, and observe that this time, since the input data has been changed (more aggressively trimmed), the analysis steps are re-run rather than restored from cache. 
+
+---------------------
+## Troubleshooting
+
 GEORGIE - why not TRIMGALORE process, rather then the FASTQC_UMITOOLS_TRIMGALORE:TRIMGALORE'
 
-Re-run the previous command specifying `--outdir exercise5`, and observe that this time, since the input data has been changed (more aggressively trimmed), the analysis steps are re-run rather than restored from cache. 
+---------------------
+## Links/resources 
+
+
+
+
+
+
 
 
