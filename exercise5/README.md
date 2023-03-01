@@ -36,7 +36,7 @@ def args = task.ext.args ?: ''
 
 We can use the `ext.args` variable to parse any tool parameters to the tool command run by the process. Neat huh! 
 
-Now look at the actual `trim_glare` run command (starting at line 42 or 58). 
+Now look at the actual `trim_galore` run command (starting at line 42 or 58). 
 
 We can see that nf-core has hardcoded the parameters `cores` and `gzip`, and also fed in the `paired` argument if the input is detected as paired-end reads. 
 
@@ -76,7 +76,9 @@ Re-run the previous command specifying `--outdir exercise5`, and observe that th
 ---------------------
 ## Troubleshooting
 
-GEORGIE - why not TRIMGALORE process, rather then the FASTQC_UMITOOLS_TRIMGALORE:TRIMGALORE'
+the original version of this exercise specified the process FASTQC_UMITOOLS_TRIMGALORE:TRIMGALORE - according to https://github.com/nf-core/rnaseq/blob/master/workflows/rnaseq.nf the process is now called FASTQ_FASTQC_UMITOOLS_TRIMGALORE
+
+When I attempted to run withName on that process, i received "WARN: There's no process matching config selector: FASTQ_FASTQC_UMITOOLS_TRIMGALORE"
 
 ---------------------
 ## Links/resources 
