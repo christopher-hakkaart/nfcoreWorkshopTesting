@@ -19,7 +19,7 @@
 * Q how to explain container tools available. Include: Singularity, Docker, Charliecloud, Podman, Shifter, gitpod?
 * Q should we run -stub instead of whole command?
 * DONE tested with most recent version of nf-core/rnaseq. Not using Nandan's nextflow.config 
-* DONE re-created reference data and STAR indexes. New [Cloudstor link]().
+* DONE re-created reference data and STAR indexes. New [Cloudstor link](https://cloudstor.aarnet.edu.au/plus/s/gIBdDhKEwfq2j58/download).
 
 -----------------
 ## Content draft 

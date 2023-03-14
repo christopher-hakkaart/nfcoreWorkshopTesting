@@ -5,32 +5,32 @@ Testing and materials development for AusBioCommons customising nf-core workshop
 * [Set up environment](#set-up-environment)
     + [Download rnaseq pipeline](#download-rnaseq-pipeline)
     + [Download materials](#download-materials)
-    + [CVMFS caching](#cvmfs-caching)
 * [Materials testing](#materials-testing)
+* [Issues and troubleshooting](#issues-and-troubleshooting)
 
 Materials developed by: 
 * Cali Willet
+* Chris Hakkaart
 * Georgie Samaha 
 
-Test instances:
-* 146.118.64.217
-* 146.118.66.55
+----------------------------
 
-## Set up environment 
+## How this repo works 
 
-Instances set up using Nimbus bioimage which has Singularity, Nextflow, Docker already installed. Running:
+This repository contains draft materials and details regarding their development for the Australian BioCommons customising nf-core workshop. Materials have been organised into separate directories for parts 1 and 2: 
+* Create a subdirectory for each exercise or session to be run in each part
+* See [Materials testing](#materials-testing) for instructions on what information to provide for each session/exercise
+* Include any useful files and scripts for each exercise/session in the relevant subdirectory
+* See [Download materials](#download-materials) for how to get workshop data 
+* See [Issues and troubleshooting](#issues-and-troubleshooting) for nf-core GitHub issue template 
 
-```
-nextflow -v 
-```
-Gives:
-```
-nextflow version 22.04.3.5703
-```
+## Set up Nimbus environment 
 
-Nextflow does not currently provide docs for previous versions. See [this GitHub issue](https://github.com/nextflow-io/nextflow/issues/3458) for explanation of why. Currently, using https://www.nextflow.io/docs/latest/index.html to guide testing and development. 
+Instances set up using Nimbus bioimage which has Singularity, Nextflow, Docker already installed. 
 
-### Download rnaseq pipeline 
+> **_NOTE:_**  Pawsey are currently updating the BioImage, will provide updated instances when available. Instances will have most recent version of Nextflow installed. 
+
+### **Download rnaseq pipeline**
 
 Download and install nf-core/rnaseq code with: 
 
@@ -38,14 +38,14 @@ Download and install nf-core/rnaseq code with:
 git clone https://github.com/nf-core/rnaseq.git
 ```
 
-### Download materials 
+### **Download materials**
 
 Using the same dataset as rnaseq workshop, but needed to recreate STAR indexes for most recent stable release of nf-core/rnaseq workflow and opting to rename files and directory for sake of clarity. Will send updated materials to Alex to be uploaded to cvmfs once finalised. For now materials are on Cloudstor (and subject to change) and contain:
 
 * `mm10_reference/mm10_chr18.fa` 
 * `mm10_reference/mm10_chr18.gtf`
 * `mm10_reference/STAR/` (star index files)
-* `samplesheet.csv` (assumes fq path `/home/ubuntu/nfcoreWorkshopTesting/materials/`)
+* `samplesheet.csv` (check path to fqs: `/home/ubuntu/nfcoreWorkshopTesting/materials/`)
 * `fastqs/`
 * `README.md`
 
@@ -58,89 +58,22 @@ Unpack the files:
 tar -zxvf nfcore_materials.tar.gz
 ```
 
-### CVMFS caching 
-
-Need to cache CVMFS before we can access containers or Nandan's training materials. This should not be required for workshop. Would like CVMFS repositories pre-mounted, as they would be going forward. Before running anything, had to re-install CVMFS:
-
-```
-git clone https://github.com/PawseySC/Pawsey-CernVM-FS.git
-cd Pawsey-CernVM-FS
-sudo ./install-cvmfs.sh install
-```
-
-Refreshed repositories: 
-```
-sudo ./install-cvmfs.sh install
-```
-
-**Prepare (unpacked) container**
-
-Make key directory for the repository: 
-```
-sudo mkdir /etc/cvmfs/keys/biocommons.aarnet.edu.au/
-```
-
-Then copied [pub key](https://github.com/PawseySC/Pawsey-CernVM-FS/blob/main/pubkeys/unpacked.containers.biocommons.aarnet.edu.au.pub) over using nano:
-```
-sudo nano /etc/cvmfs/keys/biocommons.aarnet.edu.au/unpacked.containers.biocommons.aarnet.edu.au.pub
-```
-
-Create config file for repo:
-```
-sudo nano /etc/cvmfs/config.d/unpacked.containers.biocommons.aarnet.edu.au.conf
-```
-
-Save the following inside:
-```
-CVMFS_SERVER_URL="http://bcws.test.aarnet.edu.au/cvmfs/@fqrn@"
-CVMFS_PUBLIC_KEY="/etc/cvmfs/keys/biocommons.aarnet.edu.au/unpacked.containers.biocommons.aarnet.edu.au.pub"
-```
-
-Test with: 
-```
-ls /cvmfs/unpacked.containers.biocommons.aarnet.edu.au
-```
-
-**RNAseq training materials**
-
-Do not need to worry about this for now, as materials are not yet available. See Cloudstor link for now. 
-
-To access cvmfs data repository, make key directory for the repository: 
-```
-sudo mkdir /etc/cvmfs/keys/data.biocommons.aarnet.edu.au/
-```
-
-Then copied [pub key](https://github.com/PawseySC/Pawsey-CernVM-FS/blob/main/pubkeys/data.biocommons.aarnet.edu.au.pub) over using nano:
-```
-sudo nano /etc/cvmfs/keys/data.biocommons.aarnet.edu.au/data.biocommons.aarnet.edu.au.pub
-```
-
-Create config file for repo:
-```
-sudo nano /etc/cvmfs/config.d/data.biocommons.aarnet.edu.au.conf
-```
-
-Save the following inside:
-```
-CVMFS_SERVER_URL="http://bcws.test.aarnet.edu.au/cvmfs/@fqrn@"
-CVMFS_PUBLIC_KEY="/etc/cvmfs/keys/data.biocommons.aarnet.edu.au/data.biocommons.aarnet.edu.au.pub"
-```
-
-Test with: 
-```
-ls /cvmfs/data.biocommons.aarnet.edu.au
-```
-
 ## Materials testing  
 
-Notes for each exercise draft have been included in the following directories. Each section to include: 
+Notes for each exercise draft have been included in the Part1 and Part2 directories. In each exercise/part README.md, include: 
 
 * Objectives 
 * Testing reflection
 * Content draft 
 * Troubleshooting
 * Links/resources
-* [Exercise 1](nfcoreWorkshopTesting/exercise1/README.md)
-* [Exercise 2](nfcoreWorkshopTesting/exercise2/README.md)
-* [Exercise 3](nfcoreWorkshopTesting/exercise3/README.md)
-* [Exercise 4](nfcoreWorkshopTesting/exercise4/README.md)
+
+A template README.md can be found at: nfcoreWorkshopTesting/exerciseREADME.md
+
+## Issues and troubleshooting 
+
+Any issues with nf-core/rnaseq workflow needs to be submitted as an issue on their GitHub page and shared with Chris Hakkaart. A template for submitting bugs is [here](https://github.com/Sydney-Informatics-Hub/nfcoreWorkshopTesting/blob/main/issueTemplate.md). Please link to all issues below: 
+
+* Email flag broken: https://github.com/nf-core/rnaseq/issues/949 
+* Software_versions.yml not reflecting changes: 
+* TrimGalore parameter broken:  
