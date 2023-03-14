@@ -1,12 +1,5 @@
 rnaseq/
 working_directory/
-exercise*/work/
-exercise*/results/
-exercise*/*.html 
-exercise*/*.txt
-exercise*/dag*.png
-exercise*/.nextflow*
-exercise*/samplesheet.csv
-working_directory/
+Part*/exercise*/*
 materials/
 nfcore_materials.tar.gz
