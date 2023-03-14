@@ -1,5 +1,6 @@
 rnaseq/
 working_directory/
-Part*/exercise*/*
+Part*/exercise*/work
+Part*/exercise*/.nextflow*
 materials/
 nfcore_materials.tar.gz
