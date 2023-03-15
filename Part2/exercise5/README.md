@@ -76,9 +76,97 @@ Re-run the previous command specifying `--outdir exercise5`, and observe that th
 ---------------------
 ## Troubleshooting
 
-the original version of this exercise specified the process FASTQC_UMITOOLS_TRIMGALORE:TRIMGALORE - according to https://github.com/nf-core/rnaseq/blob/master/workflows/rnaseq.nf the process is now called FASTQ_FASTQC_UMITOOLS_TRIMGALORE
+The ext.args syntax to trimgalore is not working for me. 
 
-When I attempted to run withName on that process, i received "WARN: There's no process matching config selector: FASTQ_FASTQC_UMITOOLS_TRIMGALORE"
+I initially tried this in my local `nextflow.config`:
+
+```
+process {
+    withName: 'FASTQ_FASTQC_UMITOOLS_TRIMGALORE:TRIMGALORE' {    
+        ext.args    =   '--quality 40'
+    }
+}
+```
+
+However the changed parameter is NOT listed in the 'changed params' section of STDOUT, and the trimglaore reports for the reads show the default value of 20 is still being used. 
+
+Chris said this worked for him:
+
+```
+process {
+    withName : ".*:TRIMGALORE" {
+        ext.args   = { "WRITE STUFF HERE " }
+    }
+
+```
+
+I tried this wildcard notation to the process label, and it also did not apply the new quality value. 
+
+Hang on now it did - need to re-test to confirm my sanity, was I editing the right config. BUT that aside, there is a new issue apparent:
+
+The param is NOT listed in STDOUT, but the vlaue of 40 IS now in the trimgalore reads report. YET the STAR data is pulled from cache! The number of reads trimmed is huge (98% for 40 vs ~1% for 20) so WHY IS THE BAM BEING PULLED FROM CACHE. Need to explore this - have just issued a run WITHOUT the resume flag, so that I can directly compare the BAMs
+
+Output dirs - 
+
+Results - the initial, qual not working
+ResultsTEST - using Chris notation, with RESUME flag
+Results40QualNoResume - using Chris notation, with NO resume flag
+
+The above run only took 3.5 minutes to run, because the trimmed reads files were tiny on account of the aggressive trimming. Next, compare the STAR BAMs to demonstrate that the output in ResultsTEST should NOT have been pulled from cache... (not done yet, need to come back to this)
+
+
+The example in the documentation shows to use single quotes around what is supplied to ext.args, but Chris has shown curly brackets. I tried with curly brackets, kinda expecting it to error - it did not error, and once again it did not apply the custom quality value. 
+
+The other parameters specified in my local `nextflow.config` ARE being correctly applied. Here is the full config:
+
+```
+#!/usr/bin/env nextflow
+
+nextflow.enable.dsl=2
+
+singularity {
+    enabled = true
+}
+
+trace.overwrite = true
+dag.overwrite = true
+report.overwrite = true
+timeline.overwrite = true
+
+params.max_cpus = 2
+params.max_memory = '6 GB'
+params.outdir = "Results"
+
+// Produce a workflow diagram and HTML reports  
+dag {
+        enabled = true
+        file = "${params.outdir}/dag.svg"
+}
+report {
+        enabled = true
+        file = "${params.outdir}/report.html"
+}
+timeline {
+        enabled = true
+        file = "${params.outdir}/timeline.html"
+}
+trace {
+        enabled = true
+        file = "${params.outdir}/trace.txt"
+}
+
+// Custom Phred quality threshold for trimming    
+// withName: 'FASTQ_FASTQC_UMITOOLS_TRIMGALORE:TRIMGALORE' 
+process {
+    withName: ".*:TRIMGALORE" {    
+        ext.args    =   '--quality 40'
+    }
+}
+
+```
+
+
+
 
 ---------------------
 ## Links/resources 
