@@ -1,19 +1,35 @@
-# Exercise 1: Running your first nextflow script
+# Exercise 1: Running your first Nextflow script
 
-Check install
+## Check install
 
 ``` bash
 nextflow --version
 ```
 
-Show what commands do
+## Show what commands do
 
 ``` bash
-printf 'Hello world!' | split -b 6 - chunk_`
+mkdir sandbox
+cd sandbox
 ```
 
 ``` bash
-cat chunk_aa | tr '[a-z]' '[A-Z]'`
+printf 'Hello world!' | split -b 6 - chunk_
+```
+
+Files are created
+Change chunk size to 4
+Run again
+See more chunks
+
+``` bash
+cat chunk_aa | tr '[a-z]' '[A-Z]'
+```
+
+Show chunk prints in capital letters
+
+``` bash 
+cd ..
 ```
 
 Introduce pipeline
@@ -57,7 +73,7 @@ workflow {
 } 
 ```
 
-How to run a pipeline
+## How to run a pipeline
 
 ```
 nextflow run hello.nf
@@ -69,15 +85,33 @@ Work directory - isolated processes
 tree work
 ```
 
-Configs
+## Configs
+
+Show docs
+
+Write a new file `nextflow.config`
 
 ``` bash
 params.greeting = "hola mundo"
 ```
 
+Run
+
 ```
 nextflow run hello.nf
 ```
+
+Write a new file `myconfig.config`
+
+``` bash
+params.greeting = "Bonjour le monde"
+```
+
+```
+nextflow run hello.nf -c myconfig.config
+```
+
+Use command line
 
 ```
 nextflow run hello.nf --greeting "hallo welt"
@@ -88,6 +122,8 @@ Caching
 ``` bash
 nextflow run hello.nf
 ```
+
+Edit `hello.nf`
 
 ``` bash
 process CONVERTTOUPPER { 
